@@ -11,6 +11,7 @@ final int F2_CENTER_Y = 400;
 final int F1_FACTOR = 12;
 final int F2_FACTOR = 9;
 final int offset = -15;
+final int START_LINE = 9; //should be less than 12
  
  
 void setup(){
@@ -104,25 +105,62 @@ void drawLine(int x, int y, int radius){
 }
 
 void drawRose(int x, int y, int factor){
-  for(int i = 0; i < SEGMENT_NUM; i++){
+  for(int i = START_LINE; i < START_LINE + 12 ; i++){
 
     float disease = nightTable.getRow(i).getFloat("Zymotic diseases");
     float injuries = nightTable.getRow(i).getFloat("Wounds & injuries");
     float others = nightTable.getRow(i).getFloat("All other causes");
     
-    //fill(72, 201, 176);
-    //arc(500 , 350, 40*(i+1), 40*(i+1), i*SEGMENT_ANGLE, i*SEGMENT_ANGLE+SEGMENT_ANGLE);
-    drawDisease(i, disease,factor, x, y);
-    if(injuries > others){
+    int DISEASE = (int) disease;
+    int INJURIES = (int) injuries;
+    
+    float MAX = findMax(disease, injuries, others);
+    float MIDDLE = findMiddle(disease, injuries, others);
+    float MIN = findMin(disease, injuries, others);
+    
+    if((int)MAX == DISEASE)
+      drawDisease(i, disease,factor, x, y);
+    else if((int)MAX == INJURIES)
       drawInjuries(i, injuries, factor, x, y);
+    else
       drawOthers(i, others, factor, x, y);
-    }else{
-      drawOthers(i, others, factor, x, y);
+    
+    if((int)MIDDLE == DISEASE)
+      drawDisease(i, disease,factor, x, y);
+    else if((int)MIDDLE == INJURIES)
       drawInjuries(i, injuries, factor, x, y);
-    }
+    else
+      drawOthers(i, others, factor, x, y);
+      
+    if((int)MIN == DISEASE)
+      drawDisease(i, disease,factor, x, y);
+    else if((int)MIN == INJURIES)
+      drawInjuries(i, injuries, factor, x, y);
+    else
+      drawOthers(i, others, factor, x, y);      
+    
     PFont label = createFont("Times",13,true);
     textFont(label);
     fill(33, 47, 60);
     text(nightTable.getRow(i).getString("Month"), x + 17.5 * factor * cos(i * SEGMENT_ANGLE + PI/SEGMENT_NUM), y + 17.5 * factor * sin(i * SEGMENT_ANGLE + PI/SEGMENT_NUM));
   }
+}
+
+float findMax(float a, float b, float c){
+  float tempt = a > b ? a : b;
+  return c > tempt ? c: tempt;
+}
+
+float findMiddle(float a, float b, float c){
+  if((b - a)*(a - c)>=0)
+    return a;
+  else if((a - b) * (b -c) >= 0)
+    return b;
+  else
+    return c;
+}
+
+float findMin(float a, float b, float c){
+  float tempt = a < b ? a : b;
+  return tempt < c ? tempt : c;
 }
