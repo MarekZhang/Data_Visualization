@@ -105,7 +105,7 @@ void drawLine(int x, int y, int radius){
 }
 
 void drawRose(int x, int y, int factor){
-  for(int i = START_LINE; i < START_LINE + 12 ; i++){
+  for(int i = START_LINE; i < START_LINE + SEGMENT_NUM ; i++){
 
     float disease = nightTable.getRow(i).getFloat("Zymotic diseases");
     float injuries = nightTable.getRow(i).getFloat("Wounds & injuries");
