@@ -18,9 +18,12 @@ void setup(){
   //size(1200,800);
   size(1200,800,SVG,"Nightingale_visualization.svg");
   nightTable = loadTable("nightingale.csv","header");
-  background(240, 243, 244);
   num_rows = nightTable.getRowCount();
-  println(nightTable.getRowCount() + " total rows in table"); 
+  smooth(2);
+}
+
+void draw(){
+  background(240, 243, 244);
   //Legend
   fill(72, 201, 176);
   stroke(22, 160, 133);
@@ -50,7 +53,6 @@ void setup(){
   fill(31, 97, 141);//title color
   text("Nightingale's Rose Chart", 600, 40);
   //First Drawing
-  smooth(2);
   fill(0,0.8);
   stroke(251, 252, 252);
   circle(F1_CENTER_X, F1_CENTER_Y, 400);
@@ -71,7 +73,6 @@ void setup(){
   drawLine(F1_CENTER_X, F1_CENTER_Y, 150);
   
   exit();
-  
 }
 
 void drawDisease(int i, float disease, int factor, int x, int y){
